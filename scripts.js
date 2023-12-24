@@ -42,9 +42,9 @@ while(playGame == 0)
     game();
     // check if play again
     let playAgain = prompt("Play again? Y or N");
-    if(playAgain.toLowerCase != "y" &&
-       playAgain.toLowerCase != "yes") {
-        break;
+    if(playAgain.toLowerCase() != "y" &&
+       playAgain.toLowerCase() != "yes") {
+        playGame = 1;
     }
 }
 
@@ -57,13 +57,12 @@ function game() {
         const playerChoice = getPlayerChoice();
         const computerChoice = getComputerChoice();
         const winner = playRound(playerChoice, computerChoice);
-        
         // check winner adjust score
-        if (winner == "computer"){
+        if (winner == "computerWin"){
             computerWins++;
             console.log("The computer won this round!");
         }
-        else if (winner == "player"){
+        else if (winner == "playerWin"){
             playerWins++;
             console.log("The player has won this round!");
         }
@@ -73,14 +72,17 @@ function game() {
         }
         // output score
         console.log(`Score: ${playerWins} player wins, ${computerWins} computer wins`);
+        alert(`Score: ${playerWins} player wins, ${computerWins} computer wins`);
 
         // see if game is over, if so break for loop
         if(computerWins == 3) {
             console.log("The computer has won the game!");
+            alert("The Computer has won!");
             break;
         }
         else if(playerWins == 3) {
             console.log("The player has won the game!");
+            alert("The player has won!");
             break;
         }
 
@@ -116,9 +118,32 @@ function playRound(player, computer) {
             if(computer == "rock") {
                 return "tie";
             }
+            else if (computer == "scissors") {
+                return "playerWin";
+            }
+            else {
+                return "computerWin"
+            }
         case "paper":
-            //
+            if(computer == "rock") {
+                return "playerWin";
+            }
+            else if (computer == "scissors") {
+                return "computerWin";
+            }
+            else {
+                return "tie"
+            }
         case "scissors":
+            if(computer == "rock") {
+                return "computerWin";
+            }
+            else if (computer == "scissors") {
+                return "tie";
+            }
+            else {
+                return "playerWin";
+            }
         default:
             break;
     }

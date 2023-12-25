@@ -1,98 +1,64 @@
+
+// Setup event listeners on buttons
+const rockButton = document.getElementById("rock");
+const paperButton = document.querySelector("#paper");
+const scissorsButton = document.querySelector("#scissors");
+
+rockButton.addEventListener('click', playRound);
+paperButton.addEventListener('click', playRound);
+scissorsButton.addEventListener('click', playRound);
+
+const playerScoreOutput = document.querySelector("#playerScore");
+const computerScoreOutput = document.querySelector("#computerScore");
+const tieScoreOutput = document.querySelector("#tieScore");
+let playerScore = 0;
+let computerScore = 0;
+let tieScore = 0;
+
+// play game
+// check if play again
 /*
-Description: A game for The Odin Project, playing rock paper scissors
-against the computer
-
-Pseudo Code: 
-**played from the console
-
-function getComputerChoice 
-    returns R/P/S
-function playRound(playerSelection, computerSelection)
-    return winner result
-    *case insensitive
-    *account for ties with rematch
-function game()      // best of 5 game that keeps score and reports winner or loser
-    check playGame = true(while loop)
-    let playerWins = 0
-    let computerWins = 0
-    for(let i = 0; i < 5; -++)
-        get player input
-        get computer input
-        calc winner 
-        if playerWin == 3
-            player wins!
-            play again?
-            break
-        else if computer win == 3
-            computer wins! 
-            play again?
-            break
-        play agains
-    after 
-
-    playerwins = 0;
-    computerWins = 0;
-*/
-
-let playGame = 0
-// if we are playing  game (start we playing) play a round of best of 5
-while(playGame == 0)
-{
-    // play game
-    game();
-    // check if play again
-    let playAgain = prompt("Play again? Y or N");
-    if(playAgain.toLowerCase() != "y" &&
-       playAgain.toLowerCase() != "yes") {
-        playGame = 1;
-    }
+let playAgain = prompt("Play again? Y or N");
+if(playAgain.toLowerCase() != "y" &&
+    playAgain.toLowerCase() != "yes") {
+    playGame = 1;
 }
+*/
 
 // runs best of 5 game
 function game() {
-    let playerWins = 0;
-    let computerWins = 0;
-    for(let i = 0; i < 5; i++)
-    {
-        const playerChoice = getPlayerChoice();
-        const computerChoice = getComputerChoice();
-        const winner = playRound(playerChoice, computerChoice);
-        // check winner adjust score
-        if (winner == "computerWin"){
-            computerWins++;
-            console.log("The computer won this round!");
-        }
-        else if (winner == "playerWin"){
-            playerWins++;
-            console.log("The player has won this round!");
-        }
-        else {
-            i--;
-            console.log("It's a tie! Another round will be ran!");
-        }
-        // output score
-        console.log(`Score: ${playerWins} player wins, ${computerWins} computer wins`);
-        alert(`Score: ${playerWins} player wins, ${computerWins} computer wins`);
+    console.log(`Score: ${playerScore} player wins, ${computerScore} computer wins`);
+    updateScores();
 
-        // see if game is over, if so break for loop
-        if(computerWins == 3) {
-            console.log("The computer has won the game!");
-            alert("The Computer has won!");
-            break;
-        }
-        else if(playerWins == 3) {
-            console.log("The player has won the game!");
-            alert("The player has won!");
-            break;
-        }
-
-    }// end for game loop
+    /*
+    if(computerWins == 3) {
+        console.log("The computer has won the game!");
+        alert("The Computer has won!");
+        break;
+    }
+    else if(playerWins == 3) {
+        console.log("The player has won the game!");
+        alert("The player has won!");
+        break;
+    }
+    */
 }
 
 // get the player choice
+/* ****** Done by buttons now 25 Dec 2023
 function getPlayerChoice() {
     let choice = prompt("Rock, paper, or scissors?");
     return choice.toLowerCase();
+}
+*/
+
+// output html scores
+function updateScores() {
+    let scores = document.getElementsByTagName('span');
+    let allScores = [playerScore, computerScore, tieScore];
+    for(let i = 0; i < scores.length; i++) {
+        scores[i].textContent = allScores[i];
+    }
 }
 
 // get the computer choice
@@ -111,41 +77,50 @@ function getComputerChoice() {
 }
 
 // play a round and check the winner
-function playRound(player, computer) {
+function playRound(event) {
+    const computer = getComputerChoice();
+    const playerObj = event.target;
+    const player = playerObj.value
+
     // r, p, s
     switch(player){
         case "rock":
             if(computer == "rock") {
-                return "tie";
+                tieScore++;
             }
             else if (computer == "scissors") {
-                return "playerWin";
+                playerScore++;
             }
             else {
-                return "computerWin"
+                computerScore++;
             }
+            break;
         case "paper":
             if(computer == "rock") {
-                return "playerWin";
+                playerScore++;
             }
             else if (computer == "scissors") {
-                return "computerWin";
+                computerScore++;
             }
             else {
-                return "tie"
+                tieScore++;
             }
+            break;
         case "scissors":
             if(computer == "rock") {
-                return "computerWin";
+                computerScore++;
             }
             else if (computer == "scissors") {
-                return "tie";
+                tieScore++;
             }
             else {
-                return "playerWin";
+                playerWin++;
             }
+            break;
         default:
             break;
     }
+    // basically, when button pressed, play the round, and call game to output it all
+    game();
 }
 

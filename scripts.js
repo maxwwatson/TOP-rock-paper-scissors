@@ -15,74 +15,14 @@ let playerScore = 0;
 let computerScore = 0;
 let tieScore = 0;
 
-// play game
-// check if play again
-/*
-let playAgain = prompt("Play again? Y or N");
-if(playAgain.toLowerCase() != "y" &&
-    playAgain.toLowerCase() != "yes") {
-    playGame = 1;
-}
-*/
-
-// runs best of 5 game
-function game() {
-    console.log(`Score: ${playerScore} player wins, ${computerScore} computer wins`);
-    updateScores();
-
-    /*
-    if(computerWins == 3) {
-        console.log("The computer has won the game!");
-        alert("The Computer has won!");
-        break;
-    }
-    else if(playerWins == 3) {
-        console.log("The player has won the game!");
-        alert("The player has won!");
-        break;
-    }
-    */
-}
-
-// get the player choice
-/* ****** Done by buttons now 25 Dec 2023
-function getPlayerChoice() {
-    let choice = prompt("Rock, paper, or scissors?");
-    return choice.toLowerCase();
-}
-*/
-
-// output html scores
-function updateScores() {
-    let scores = document.getElementsByTagName('span');
-    let allScores = [playerScore, computerScore, tieScore];
-    for(let i = 0; i < scores.length; i++) {
-        scores[i].textContent = allScores[i];
-    }
-}
-
-// get the computer choice
-function getComputerChoice() {
-    const choice = Math.floor(1 + (Math.random() * 3));
-    switch(choice) {
-        case 1:
-            return "rock";
-        case 2:
-            return "paper";
-        case 3:
-            return "scissors";
-        default:
-            break;
-    }
-}
-
-// play a round and check the winner
+// If a button is pressed, playRound is called, which then begins the game, and updates
+// everything for the UI
 function playRound(event) {
     const computer = getComputerChoice();
     const playerObj = event.target;
     const player = playerObj.value
 
-    // r, p, s
+    // Handle who actually won. Then update score
     switch(player){
         case "rock":
             if(computer == "rock") {
@@ -114,13 +54,57 @@ function playRound(event) {
                 tieScore++;
             }
             else {
-                playerWin++;
+                playerScore++;
             }
             break;
         default:
             break;
     }
-    // basically, when button pressed, play the round, and call game to output it all
+    // Now run game(), which updates scores and calls gameOver() if one person has a score
+    // over 5. This used to house the main game, but not so with the UI Dom changes.
     game();
 }
+// runs best of 5 game
+function game() {
+    updateScores();
+    if(computerScore == 5){
+        gameOver("Computer");
+    }
+    else if(playerScore == 5) {
+        gameOver("Player");
+    }
+
+}
+
+// if computer or player has a score of 5, output winner
+function gameOver(winner) {
+    let gameOverText = document.getElementById("whoWon");
+    gameOverText.textContent = `The ${winner} is the winner!`;
+}
+
+// output html scores
+function updateScores() {
+    let scores = document.getElementsByTagName('span');
+    let allScores = [playerScore, computerScore, tieScore];
+    for(let i = 0; i < scores.length; i++) {
+        scores[i].textContent = allScores[i];
+    }
+}
+
+// get the computer choice
+function getComputerChoice() {
+    const choice = Math.floor(1 + (Math.random() * 3));
+    switch(choice) {
+        case 1:
+            return "rock";
+        case 2:
+            return "paper";
+        case 3:
+            return "scissors";
+        default:
+            break;
+    }
+}
+
+
 

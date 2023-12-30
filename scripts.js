@@ -1,6 +1,9 @@
+// Future To do (after my 25 Dec 2023 DOM/UI update) is actually handle resetting 
+// the game if the player wants to play again
 
 // Setup event listeners on buttons
 const rockButton = document.getElementById("rock");
+console.log(rockButton);
 const paperButton = document.querySelector("#paper");
 const scissorsButton = document.querySelector("#scissors");
 
@@ -14,13 +17,13 @@ const tieScoreOutput = document.querySelector("#tieScore");
 let playerScore = 0;
 let computerScore = 0;
 let tieScore = 0;
+let isPlaying = true;
 
 // If a button is pressed, playRound is called, which then begins the game, and updates
 // everything for the UI
 function playRound(event) {
     const computer = getComputerChoice();
-    const playerObj = event.target;
-    const player = playerObj.value
+    const player = event.target.getAttribute('data-value');
 
     // Handle who actually won. Then update score
     switch(player){
@@ -78,8 +81,26 @@ function game() {
 
 // if computer or player has a score of 5, output winner
 function gameOver(winner) {
+    notPlaying();
     let gameOverText = document.getElementById("whoWon");
     gameOverText.textContent = `The ${winner} is the winner!`;
+    setTimeout(() => {
+        let playAnotherRound = prompt("You wish to play again? Y or N");
+        if(playAnotherRound == 'y' ||
+        playAnotherRound == 'yes') {
+            isPlaying == true;
+            updateScores();
+            gameOverText.textContent = ``;
+        }
+        else {
+            setTimeout(() => {
+                alert("Thanks for playing!");
+                updateScores();
+                isPlaying = false;
+            },3000);
+        }
+    },3000);
+    
 }
 
 // output html scores
@@ -106,5 +127,11 @@ function getComputerChoice() {
     }
 }
 
+function notPlaying() {
+    isPlaying = false;
+    computerScore = 0
+    playerScore = 0;
+    tieScore = 0;
+}
 
 
